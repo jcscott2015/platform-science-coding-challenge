@@ -40,7 +40,7 @@ Data files for each are supplied in the `data` folder.
 
 ## Approach
 
-The challenge is a variation of the classic [Traveling Salesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem). The difference being rewards rather than costs are being evaluated. ***The Suitability Score*** is a "reward".
+The challenge is a variation of the [Assignment Problem](https://en.wikipedia.org/wiki/Assignment_problem). The difference being rewards rather than costs are being evaluated. ***The Suitability Score*** is a "reward".
 
 The most popular [Hungarian (Kuhn-Munkres) Algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm), better explained [here](https://brc2.com/the-algorithm-workshop/), was going to be my solution choice. After some investigating, I found evidence that the Jonker-Volgenant algorithm was markedly faster. The Hungarian Algorithm has a Big O notation of O(n<sup>3</sup>), where Jonker-Volgenant has been calculated to O(n<sup>2</sup>). The Jonker-Volgenant algorithm also has fewer and less complicated steps.
 
@@ -49,6 +49,8 @@ The Jonker-Volgenant Linear Assignment Problem code flavors are available mostly
 Like the Hungarian Algorithm, the Jonker-Volgenant algorithm calculates optimal, or minimal, cost. This article, [Linear Assignment Problem in One Shot Learning Networks](https://medium.com/@rajneeshtiwari_22870/linear-assignment-problem-in-metric-learning-for-computer-vision-eba7d637c5d4), gave me a clue as to how to convert a cost matrix into a rewards matrix. Inverting the reward scores (multiply by ***-1***) and replacing any ***0*** score with a very large number, say 100000, allows the Jonker-Volgenant algorithm to produce a reward solution. Using a cost matrix and a corresponding rewards matrix, the optimal, maximum suitability scores can be retrieved.
 
 Once the suitability scores are determined and the optimal ones identified, another corresponding matrix containing driver's names and destination addresses is used to match the scores to the driver/destination pair.
+
+As the matrices are padded, unbalanced assignments can be accomodated. Assignments for those simply won't be made. All matices are squares, even if the data rows aren't equal to data columns.
 
 ## References
 
