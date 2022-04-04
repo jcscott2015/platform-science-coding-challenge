@@ -48,7 +48,7 @@ The Jonker-Volgenant Linear Assignment Problem code flavors are available mostly
 
 Like the Hungarian Algorithm, the Jonker-Volgenant algorithm calculates optimal, or minimal, cost. This article, [Linear Assignment Problem in One Shot Learning Networks](https://medium.com/@rajneeshtiwari_22870/linear-assignment-problem-in-metric-learning-for-computer-vision-eba7d637c5d4), gave me a clue as to how to convert a cost matrix into a rewards matrix. Inverting the reward scores (multiply by ***-1***) and replacing any ***0*** score with a very large number, say 100000, allows the Jonker-Volgenant algorithm to produce a reward solution. Using a cost matrix and a corresponding rewards matrix, the optimal, maximum suitability scores can be retrieved.
 
-Once the suitability scores are determined and the optimal ones identified, another corresponding matrix containing driver's names and destination addresses is used to match the scores to the driver/destination pair. A total optimal suitability score is summed by pairing the Jonker-Volgenant solution map with the rewards matrix.
+Once the suitability scores are determined and the optimal ones identified, another corresponding matrix containing driver's names and destination addresses is used to match the scores to the driver/destination pair.
 
 ## References
 

@@ -92,22 +92,4 @@ const suitabilityScore = (driver: string, addr: string): number => {
 	return commonFactors(driver, addr) ? score * 1.5 : score;
 };
 
-/**
- * Sums up suitability score
- * @param scores number[][]
- * @param rowIndices Int32Array
- * @param colIndices Int32Array
- * @returns number
- */
-export const totalSuitabilityScore = (
-	scores: number[][],
-	rowIndices: Int32Array,
-	colIndices: Int32Array,
-): number => {
-	return colIndices.reduce((totalScore, i) => {
-		const j = rowIndices[i];
-		return totalScore + scores[i][j];
-	}, 0);
-};
-
 export default suitabilityScore;

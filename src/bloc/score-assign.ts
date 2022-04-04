@@ -5,13 +5,12 @@
  * @requires     ../lap-ts/lap
  * @requires     ../lap-ts/lap.ILap
  * @requires     ./suitability-score
- * @requires     ./suitability-score.totalSuitabilityScore
  * @requires     ./make-matrix
  * @requires     ./make-matrix.IMatrix
  */
 
 import lap from '../lap-ts/lap';
-import suitabilityScore, { totalSuitabilityScore } from './suitablity-score';
+import suitabilityScore from './suitablity-score';
 import makeMatrix, { IMatrix } from './make-matrix';
 
 /**
@@ -68,7 +67,7 @@ const getScoreAndMakeAssignments = (
 	// Initialize the n x n cost matrix with zeros
 	const n = drivers.length;
 	const driversAddrsMatrix = <IMatrix[][]>makeMatrix(n, {});
-	const { rewards, costs } = createRewardAndCostMatrices(
+	const { costs } = createRewardAndCostMatrices(
 		drivers, addrs, driversAddrsMatrix
 	);
 
@@ -80,7 +79,7 @@ const getScoreAndMakeAssignments = (
 	 * work for maximization problem
 	 */
 	const solution = lap(n, costs);
-	const totalSS = totalSuitabilityScore(rewards, solution.row, solution.col);
+	const totalSS = Math.abs(solution.cost);
 	const assignments = mapDriversAndAddrs(
 		solution.row, solution.col, driversAddrsMatrix
 	);

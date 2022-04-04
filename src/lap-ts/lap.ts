@@ -49,7 +49,7 @@
  * v: Float64Array;
  */
 interface ILap {
-	// cost: number;
+	cost: number;
 	row: Int32Array;
 	col: Int32Array;
 	u: Float64Array;
@@ -325,16 +325,16 @@ const lap = (
 		} while (i != freerow);
 	}
 
-	// // calculate optimal (minimal) cost.
-	// let lapcost = 0;
-	// for (i = dim - 1; i >= 0; i--) {
-	// 	j = rowsol[i];
-	// 	u[i] = costMatrix[i][j] - v[j];
-	// 	lapcost += costMatrix[i][j];
-	// }
+	// calculate optimal (minimal) cost.
+	let lapcost = 0;
+	for (i = dim - 1; i >= 0; i--) {
+		j = rowsol[i];
+		u[i] = costMatrix[i][j] - v[j];
+		lapcost += costMatrix[i][j];
+	}
 
 	return {
-		// cost: lapcost,
+		cost: lapcost,
 		row: rowsol,
 		col: colsol,
 		u: u,
