@@ -42,7 +42,7 @@ Data files for each are supplied in the `data` folder.
 
 The challenge is a variation of the [Assignment Problem](https://en.wikipedia.org/wiki/Assignment_problem). The difference being rewards rather than costs are being evaluated. ***The Suitability Score*** is a "reward".
 
-The most popular [Hungarian (Kuhn-Munkres) Algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm), better explained [here](https://brc2.com/the-algorithm-workshop/), was going to be my solution choice. After some investigating, I found evidence that the Jonker-Volgenant algorithm was markedly faster. The Hungarian Algorithm has a Big O notation of O(n<sup>3</sup>), where Jonker-Volgenant has been calculated to O(n<sup>2</sup>). The Jonker-Volgenant algorithm also has fewer and less complicated steps.
+The most popular [Hungarian (Kuhn-Munkres) Algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm), better explained [here](https://brc2.com/the-algorithm-workshop/), was going to be my solution choice. After some investigating, I found evidence that the Jonker-Volgenant algorithm was markedly faster. The Hungarian Algorithm has a time complexity of O(n<sup>3</sup>), where Jonker-Volgenant has been calculated to O(n<sup>2</sup>). The Jonker-Volgenant algorithm also has fewer and less complicated steps.
 
 The Jonker-Volgenant Linear Assignment Problem code flavors are available mostly in Python, and are based on Roy Jonker's C++ code. One NodeJS variant [exists](https://github.com/Fil/lap-jv). I forked the code and added Typescript support. The original C++ code can be a NodeJS addon, but I preferred a Typescript module instead for this challenge.
 
