@@ -1,10 +1,11 @@
 /**
- * @file Business logic for determining suitablity score.
+ * @file Business logic for determining suitability score.
  * @author John C. Scott
  */
 
 /**
  * Find just the street name from complete address.
+ * Assumes address line is comma separated.
  * Return lowercase with no whitespace.
  * @param str string
  * @returns string
@@ -36,9 +37,10 @@ const howManyConsonants = (str: string): number => {
 };
 
 /**
+ * Checks for common factors and returns boolean.
  * If the length of the shipment's destination street name shares any common factors
- * (besides 1) with the length of the driver's name, the SS is increased by 50%
- * above the base SS.
+ * (besides 1) with the length of the driver's name, the suitability score is increased
+ * by 50% above the base suitability score.
  * @param driver string
  * @param addr string
  * @returns boolean
@@ -89,7 +91,14 @@ const getFactors = (N: number): number[] => {
 const suitabilityScore = (driver: string, addr: string): number => {
 	const score = justStrName(addr).length % 2 == 0 ?
 		howManyVowels(driver) * 1.5 : howManyConsonants(driver);
-	return commonFactors(driver, addr) ? score * 1.5 : score;
+	const adjustedScore = commonFactors(driver, addr) ? score * 1.5 : score;
+	/**
+	 * Convert score to reward so lap algorithm returns a maximum amount.
+	 * Invert the score (multiply by -1), unless score is zero. If zero,
+	 * replace with a very large number, say 100000.
+	 * @see {@link https://medium.com/@rajneeshtiwari_22870/linear-assignment-problem-in-metric-learning-for-computer-vision-eba7d637c5d4}
+	 */
+	return adjustedScore == 0 ? 100000 : -1 * adjustedScore;
 };
 
 export default suitabilityScore;

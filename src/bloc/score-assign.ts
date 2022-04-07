@@ -14,20 +14,20 @@ import suitabilityScore from './suitablity-score';
 import makeMatrix, { IMatrix } from './make-matrix';
 
 /**
- * Create Reward and Cost matrices to map and convert Costs to Rewards.
+ * Create reward matrix and driver/addresses assignment matrix.
  * @param drivers string[]
  * @param addrs  string[]
- * @param matrix  IMatrix[][]
- * @returns [key: string]: number[][]
+ * @returns number[][]
  */
-const createRewardAndCostMatrices = (
+const createMatrices = (
 	drivers: string[],
 	addrs: string[],
-	daMatrix: IMatrix[][]
-): { [key: string]: number[][] } => {
+): { [key: string]: number[][] | IMatrix[][] } => {
 	// Initialize the n x n reward matrix with zeros
-	const n = addrs.length;
-	const rewardMatrix = <number[][]>makeMatrix(n, 0);
+	const rewardMatrix = <number[][]>makeMatrix(addrs.length, 0);
+
+	// Initialize the n x n assignment matrix with empty object
+	const driversAddrsMatrix = <IMatrix[][]>makeMatrix(drivers.length, {});
 
 	/**
 	 * Construct reward matrix, as well as fill mapping of all pairs of driver
@@ -36,26 +36,16 @@ const createRewardAndCostMatrices = (
 	drivers.forEach((name, row) => {
 		addrs.forEach((address, column) => {
 			rewardMatrix[row][column] = suitabilityScore(name, address);
-			daMatrix[row][column] = { driver: name, addr: address };
+			driversAddrsMatrix[row][column] = { driver: name, addr: address };
 		});
 	});
 
-	/**
-	 * Convert cost matrix to reward matrix. Invert the score (multiply by -1),
-	 * unless score is zero. If zero, replace with a very large number, say 100000.
-	 * @see {@link https://medium.com/@rajneeshtiwari_22870/linear-assignment-problem-in-metric-learning-for-computer-vision-eba7d637c5d4}
-	 */
-	const costMatrix = rewardMatrix
-		.map(row => row.map(score => score == 0 ? 100000 : -1 * score));
-
-	return { rewards: rewardMatrix, costs: costMatrix };
+	return { rewards: rewardMatrix, driversAddrs: driversAddrsMatrix };
 };
 
 /**
+ * Create reward and assignment matrices.
  * Returns total score and driver street assignments.
- * Create reward and cost matrices. The reward matrix is generated from
- * using the suitability score algorithm provided. The cost matrix is
- * derived from the reward matrix.
  * @param drivers string[]
  * @param addrs string[]
  * @returns [key: string]: number | Map<string, string>
@@ -64,24 +54,11 @@ const getScoreAndMakeAssignments = (
 	drivers: string[],
 	addrs: string[]
 ): { [key: string]: number | Map<string, string> } => {
-	// Initialize the n x n cost matrix with zeros
-	const n = drivers.length;
-	const driversAddrsMatrix = <IMatrix[][]>makeMatrix(n, {});
-	const { costs } = createRewardAndCostMatrices(
-		drivers, addrs, driversAddrsMatrix
-	);
-
-	/**
-	 * Use cost matrix to obtain the optimized driver/destination
-	 * pairings in the form of an array of all matrix positions (i.e. [i,j])
-	 * that correspond to optimized pairings. These correspond to the optimized
-	 * reward pairings in the original reward matrix, so the assignments will
-	 * work for maximization problem
-	 */
-	const solution = lap(n, costs);
+	const { rewards, driversAddrs } = createMatrices( drivers, addrs);
+	const solution = lap(drivers.length, rewards as number[][]);
 	const totalSS = Math.abs(solution.cost);
 	const assignments = mapDriversAndAddrs(
-		solution.row, solution.col, driversAddrsMatrix
+		solution.row, solution.col, driversAddrs as IMatrix[][]
 	);
 	return { totalSS, assignments };
 };
