@@ -50,7 +50,7 @@ Like the Hungarian Algorithm, the Jonker-Volgenant algorithm calculates optimal,
 
 Once the suitability scores are determined and the optimal ones identified, another corresponding matrix containing driver's names and destination addresses is used to match the scores to the driver/destination pair.
 
-As the matrices are padded, unbalanced assignments can be accomodated. Assignments for those simply won't be made. All matices are squares, even if the data rows aren't equal to data columns.
+As the matrices are padded, unbalanced assignments can be accommodated. Assignments for those simply won't be made. All matices are squares, even if the data rows aren't equal to data columns.
 
 ## References
 
